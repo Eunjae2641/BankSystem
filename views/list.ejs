@@ -18,12 +18,12 @@
     <% }else{ %>
     <table width = 30%>
       <tr>
-        <td><a href="/index">Home</a></td>
+        <td><a href="/index/<%= id %>">Home</a></td>
         <td><a href="/list/<%= id %>">거래내역</a></td>
         <td>
           <%= name %> 님 환영합니다!
         </td>
-        <td><a href="/mypage">마이페이지</a></td>
+        <td><a href="/mypage/<%= id %>">마이페이지</a></td>
         <td><a href="/logout">로그아웃</a></td>
       </tr>
     </table>
@@ -34,13 +34,14 @@
         <th>계좌번호</th>
         <th>기관</th>
         <th>예금잔액</th>
+        <th>계좌삭제</th>
       </tr>
       <% account.forEach(function (value) { %>
         <tr>
           <td><%= aNUMBER %></td>
           <td><%= bank %></td>
-          <td><a href="/remain/<%= value.aNUMBER %>">조회</a></td>
-          <td><a href="/delete/<%= value.aNUMBER %>">삭제</a></td>
+          <td><a href="/remain/<%= value.aNUMBER %>/<%= id %>">조회</a></td>
+          <td><a href="/delete/<%= value.aNUMBER %>/<%= id %>">삭제</a></td>
         </tr>
         <% }); %>
     </table>

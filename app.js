@@ -7,11 +7,14 @@ const session = require('express-session');
 const crypto = require('crypto');
 const FileStore = require('session-file-store')(session);
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("assets"));
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true,}));
+app.use(bodyParser.json()); 
 
 const con = mysql.createConnection({
   host: 'localhost',
@@ -28,13 +31,15 @@ app.use(session({
   store: new FileStore()
 }));
 
-app.get('/index', (req, res) => {
+app.get('/index/:id', (req, res) => {
   console.log('메인페이지');
+  con.query('select * from user where id=?', [req.params.id], (err, data) => {
   res.render('index', {
-    name: req.params.NAME,
+    name: data[0].NAME,
     id: req.params.id,
     is_logined: req.params.is_logined,
-  })
+  });
+});
 })
 
 //회원가입
@@ -49,7 +54,7 @@ app.post('/register', (req, res) => {
   const id = body.id;
   const pw = body.pw;
   const name = body.name;
-  const age = body.age;
+  const email = body.email;
 
   con.query('select * from user where id=?', [id], (err, data) => {
     if (data.length == 0) {
@@ -85,9 +90,9 @@ app.post('/login', (req, res) => {
     if (id == data[0].ID && pw == data[0].PW) {
       console.log('로그인 성공');
       //세션에 추가
-      req.session.name = data.NAME;
-      req.session.id = data.ID;
-      req.session.pw = data.PW;
+      body.name = data.NAME;
+      body.id = data.ID;
+      body.pw = data.PW;
       req.session.save(function () {  //세션 스토어에 적용하는 작업
         res.render('index', {  //정보전달
           name: data[0].NAME,
@@ -96,6 +101,7 @@ app.post('/login', (req, res) => {
           is_logined: true,
         });
       });
+      console.log(req.body.name);
     } else {
       console.log('로그인 실패');
       res.render('login');
@@ -123,15 +129,15 @@ app.get('/list/:id', (req, res) => {
     req.session.save(function () {
       res.render('list', {
         account: data,
-        name: req.params.NAME,
-        id: req.params.ID,
+        name: data[0].NAME,
+        id: req.params.id,
         aNUMBER: data[0].aNUMBER,
         bank: data[0].bank,
         is_logined: req.params.is_logined,
       });
     });
+    });
   });
-});
 
 //연결 계좌 삭제
 app.get('/delete/:aNUMBER', (req, res) => {
@@ -145,7 +151,7 @@ app.get('/delete/:aNUMBER', (req, res) => {
   })
 })
 
-app.get('/remain/:aNumber', (req, res) => {
+app.get('/remain/:aNumber/:id', (req, res) => {
   console.log('거래내역 조회');
   const body = req.body;
   const PLUS = body.PLUS;
@@ -153,37 +159,54 @@ app.get('/remain/:aNumber', (req, res) => {
   con.query('select * from transaction where aNUMBER=?', [req.params.aNumber], (err, data) => {
     if (err) throw err;
     console.log('거래내역 조회 성공')
+    req.session.save(function () {
     if (data[0].PLUS == 1) {
       res.render('remain', {
         transaction: data,
         id: req.params.id,
-        name: req.params.NAME,
+        name: data[0].NAME,
         sendName: data[0].sendName,
         out_money: data[0].MONEY,
         in_money: null,
         bank: data[0].bank,
         least_money: data[0].MONEY,
-        is_logined: req.params.is_logined,
-
+        is_logined: body.is_logined,
       });
     } else {
       res.render('remain', {
         transaction: data,
         id: req.params.id,
-        name: req.params.NAME,
+        name: body.name,
         sendName: data[0].sendName,
         out_money: null,
         in_money: data[0].MONEY,
         bank: data[0].bank,
         least_money: data[0].MONEY,
-        is_logined: req.params.is_logined,
-
-      })
+        is_logined: body.is_logined,
+      });
     }
+  });
   });
 });
 
-app.get
+app.get('/mypage/:id', (req,res) =>{
+  console.log("마이페이지 접속 성공");
+
+  con.query('select * from user where id=?', [req.params.id], (err, data) => {
+    if (err) throw err;
+    req.session.save(function () {
+      res.render('mypage', {
+        user : data,
+        name: data[0].NAME,
+        id: data[0].id,
+        pw : data[0].pw,
+        email : data[0].email,
+        is_logined: req.params.is_logined,
+      });
+    });
+    });
+  });
+
 
 
 
