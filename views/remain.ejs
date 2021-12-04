@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>거래내역 조회</title>
+</head>
+<body>
+  <% if(is_logined==false){ %>
+    <table width = "30%">
+      <tr>
+        <td><a href="/">Home</a></td>
+        <td><a href="/login">로그인</a></td>
+        <td><a href="/register">회원가입</a></td>
+      </tr>
+    </table>
+    <% }else{ %>
+    <table width = 30%>
+      <tr>
+        <td><a href="/">Home</a></td>
+        <td><a href="/list/<%= id %>">거래내역</a></td>
+        <td>
+          <%= name %> 님 환영합니다!
+        </td>
+        <td><a href="/logout">로그아웃</a></td>
+      </tr>
+    </table>
+    <% } %>
+
+    <table>
+      <tr>
+        <th>거래처</th>
+        <th>출금액</th>
+        <th>입금액</th>
+        <th>잔액</th>
+      </tr>
+      <% transaction.forEach(function (value) { %>
+        <tr>
+          <td><%= sendName %></td>
+          <td><%= out_money %></td>
+          <td><%= in_money %></td>
+          <td><%= least_money %></td>
+        </tr>
+        <% }); %>
+    </table>
+  
+</body>
+</html>
