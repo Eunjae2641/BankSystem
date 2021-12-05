@@ -13,8 +13,8 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("assets"));
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true,}));
-app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true, }));
+app.use(bodyParser.json());
 
 const con = mysql.createConnection({
   host: 'localhost',
@@ -34,12 +34,12 @@ app.use(session({
 app.get('/index/:id', (req, res) => {
   console.log('메인페이지');
   con.query('select * from user where id=?', [req.params.id], (err, data) => {
-  res.render('index', {
-    name: data[0].NAME,
-    id: req.params.id,
-    is_logined: req.params.is_logined,
+    res.render('index', {
+      name: data[0].NAME,
+      id: req.params.id,
+      is_logined: req.params.is_logined,
+    });
   });
-});
 })
 
 //회원가입
@@ -136,8 +136,8 @@ app.get('/list/:id', (req, res) => {
         is_logined: req.params.is_logined,
       });
     });
-    });
   });
+});
 
 //연결 계좌 삭제
 app.get('/delete/:aNUMBER', (req, res) => {
@@ -160,55 +160,76 @@ app.get('/remain/:aNumber/:id', (req, res) => {
     if (err) throw err;
     console.log('거래내역 조회 성공')
     req.session.save(function () {
-    if (data[0].PLUS == 1) {
-      res.render('remain', {
-        transaction: data,
-        id: req.params.id,
-        name: data[0].NAME,
-        sendName: data[0].sendName,
-        out_money: data[0].MONEY,
-        in_money: null,
-        bank: data[0].bank,
-        least_money: data[0].MONEY,
-        is_logined: body.is_logined,
-      });
-    } else {
-      res.render('remain', {
-        transaction: data,
-        id: req.params.id,
-        name: body.name,
-        sendName: data[0].sendName,
-        out_money: null,
-        in_money: data[0].MONEY,
-        bank: data[0].bank,
-        least_money: data[0].MONEY,
-        is_logined: body.is_logined,
-      });
-    }
-  });
+      if (data[0].PLUS == 1) {
+        res.render('remain', {
+          transaction: data,
+          id: req.params.id,
+          name: data[0].NAME,
+          sendName: data[0].sendName,
+          out_money: data[0].MONEY,
+          in_money: null,
+          bank: data[0].bank,
+          least_money: data[0].MONEY,
+          is_logined: body.is_logined,
+        });
+      } else {
+        res.render('remain', {
+          transaction: data,
+          id: req.params.id,
+          name: body.name,
+          sendName: data[0].sendName,
+          out_money: null,
+          in_money: data[0].MONEY,
+          bank: data[0].bank,
+          least_money: data[0].MONEY,
+          is_logined: body.is_logined,
+        });
+      }
+    });
   });
 });
 
-app.get('/mypage/:id', (req,res) =>{
+app.get('/mypage/:id', (req, res) => {
   console.log("마이페이지 접속 성공");
 
   con.query('select * from user where id=?', [req.params.id], (err, data) => {
     if (err) throw err;
+    console.log(data);
     req.session.save(function () {
       res.render('mypage', {
-        user : data,
+        user: data,
         name: data[0].NAME,
-        id: data[0].id,
-        pw : data[0].pw,
-        email : data[0].email,
+        id: req.params.id,
+        pw: data[0].PW,
+        email: data[0].EMAIL,
         is_logined: req.params.is_logined,
       });
     });
-    });
   });
+});
 
+app.post('/update/:id', (req, res) => { // 수정링크를 타고 들어온 데이터의 id 값과 des 값을 받아서 update ejs 파일로 넘긴다
+  var id = req.body.id;
+  var pw = req.body.pw;
+  var name = req.body.name;
+  var email = req.body.email;
+  var data = [id, pw, name, email];
 
+  console.log("업데이트 시도");
 
+  var sql = "UPDATE user SET id = ?, pw = ?, name = ?, email = ?";
+
+  con.query(sql, data, function (err, result, fields) {
+    if (err) throw err;
+    console.log(result);
+      res.render('index', {
+        name: req.body.name,
+        id: req.body.id,
+        is_logined: req.params.is_logined,
+      });
+  });
+});
+      
 
 app.listen(port, () => {
   console.log(`${port}번 포트에서 서버 대기중입니다.`)
