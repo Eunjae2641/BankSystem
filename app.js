@@ -41,7 +41,6 @@ app.get('/index/:id', (req, res) => {
     });
   });
 })
-
 //회원가입
 app.get('/register', (req, res) => {
   console.log('회원가입 페이지');
@@ -71,7 +70,9 @@ app.post('/register', (req, res) => {
 //로그인
 app.get('/login', (req, res) => {
   console.log('로그인 작동');
-  res.render('login');
+  res.render('login', {
+    is_logined: false
+  });
 });
 
 app.post('/login', (req, res) => {
@@ -171,7 +172,7 @@ app.post('/account/:id', (req, res) => {
       if (data.length == 0) {
         console.log('계좌 추가 성공');
         con.query('insert into account(id,aNUMBER, apw,NAME,bank) values(?,?,?,?,?)', [req.params.id, aNUMBER, apw, name, bank]);
-        con.query('insert into transaction(aNUMBER, sendName, MONEY, PLUS, sendNumber,NAME) values(?,?,?,?,?,?)',[aNUMBER, "GSMbank", 10000, 0, "99999999999", name]);
+        con.query('insert into transaction(aNUMBER, sendName, MONEY, PLUS, sendNumber,sendbank,NAME) values(?,?,?,?,?,?)', [aNUMBER, "GSMbank", 10000, 0, "99999999999", "GSMbank", name]);
         res.send(`<script>alert('계좌추가 성공!!'); location.href = document.referrer; </script>`); //아쉬운 점 script에 경우 location.href일 때 파라미터 값을 어떻게 전달해야하나 몰라 이 전의 페이지로 돌아가 거래내역을 눌러야함
       } else {
         console.log('계좌 추가 실패');
@@ -207,72 +208,122 @@ app.get('/delete/:aNUMBER/:id', (req, res) => {
   });
 });
 
-  app.get('/remain/:aNumber/:id', (req, res) => {
-    console.log('거래내역 조회');
-    const body = req.body;
-    const PLUS = body.PLUS;
-    con.query('select * from user where id=?',[req.params.id],(err, result) =>{
-      console.log(result);
-      const name = result[0].NAME;
+app.get('/remain/:aNumber/:id', (req, res) => {
+  console.log('거래내역 조회');
+  const body = req.body;
+  const PLUS = body.PLUS;
+  con.query('select * from user where id=?', [req.params.id], (err, result) => {
+    console.log(result);
+    const name = result[0].NAME;
     con.query('select * from transaction where aNUMBER=?', [req.params.aNumber], (err, data) => {
       if (err) throw err;
       console.log('거래내역 조회 성공')
       req.session.save(function () {
-          res.render('remain', {
-            transaction: data,
-            id: req.params.id,
-            name: name,
-            is_logined: body.is_logined,
-            plus : data.PLUS
-          });
+        res.render('remain', {
+          transaction: data,
+          id: req.params.id,
+          name: name,
+          is_logined: body.is_logined,
+          plus: data.PLUS,
+          aNUMBER: req.params.aNumber,
+        });
 
       });
     });
   });
 });
 
-  app.get('/mypage/:id', (req, res) => {
-    console.log("마이페이지 접속 성공");
-
-    con.query('select * from user where id=?', [req.params.id], (err, data) => {
-      if (err) throw err;
-      console.log(data);
-      req.session.save(function () {
-        res.render('mypage', {
-          user: data,
-          name: data[0].NAME,
-          id: req.params.id,
-          pw: data[0].PW,
-          email: data[0].EMAIL,
-          is_logined: req.params.is_logined,
-        });
-      });
-    });
-  });
-
-  app.post('/update/:id', (req, res) => { // 수정링크를 타고 들어온 데이터의 id 값과 des 값을 받아서 update ejs 파일로 넘긴다
-    var id = req.body.id;
-    var pw = req.body.pw;
-    var name = req.body.name;
-    var email = req.body.email;
-    var data = [id, pw, name, email];
-
-    console.log("업데이트 시도");
-
-    var sql = "UPDATE user SET id = ?, pw = ?, name = ?, email = ?";
-
-    con.query(sql, data, function (err, result, fields) {
-      if (err) throw err;
-      console.log(result);
-      res.render('index', {
-        name: req.body.name,
-        id: req.body.id,
+app.get('/withdraw/:aNumber/:id', (req, res) => {
+  console.log('이체하기 작동');
+  con.query('select * from user where id=?', [req.params.id], (err, data) => {
+    if (err) throw err;
+    req.session.save(function () {
+      res.render('withdraw', {
+        user: data,
+        name: data[0].NAME,
+        id: req.params.id,
         is_logined: req.params.is_logined,
       });
     });
   });
+})
+app.post('/withdraw/:aNumber/:id', (req, res) => {
+  console.log('이체하기');
+  const body = req.body;
+  const sendNumber = body.sendNumber;
+  const money = body.money;
+  const sendName = body.sendName;
+  const sendbank = body.sendbank;
+  const apw = body.apw;
 
 
-  app.listen(port, () => {
-    console.log(`${port}번 포트에서 서버 대기중입니다.`)
+  con.query('select * from account where id=?', [req.params.id], (err, result) => {
+    console.log(result);
+    const name = result[0].NAME;
+    if (apw == result[0].aPW) {
+      con.query('insert into transaction(aNUMBER, sendName, MONEY, PLUS, sendNumber, sendbank, NAME) values(?,?,?,?,?,?,?)', [req.params.aNumber, sendName, money, 1, sendNumber, sendbank, name], (err, data) => {
+        if (err) throw err;
+        console.log('이체 성공') //콤보박스로 선택하게하려 했으나 오류나서 불가했음
+        req.session.save(function () {
+          res.render('remain', {
+            transaction: data,
+            id: req.params.id,
+            name: name,
+            is_logined: body.is_logined,
+            plus: data.PLUS,
+            aNUMBER: req.params.aNumber,
+          });
+        });
+      });
+    } else {
+      console.log('이체 실패');
+      res.send(`<script>alert("이체 실패!!(비밀번호가 틀렸습니다.)"); location.href = document.referrer; </script>`)
+    }
   });
+});
+
+app.get('/mypage/:id', (req, res) => {
+  console.log("마이페이지 접속 성공");
+
+  con.query('select * from user where id=?', [req.params.id], (err, data) => {
+    if (err) throw err;
+    console.log(data);
+    req.session.save(function () {
+      res.render('mypage', {
+        user: data,
+        name: data[0].NAME,
+        id: req.params.id,
+        pw: data[0].PW,
+        email: data[0].EMAIL,
+        is_logined: req.params.is_logined,
+      });
+    });
+  });
+});
+
+app.post('/update/:id', (req, res) => { // 수정링크를 타고 들어온 데이터의 id 값과 des 값을 받아서 update ejs 파일로 넘긴다
+  var id = req.params.id;
+  var pw = req.body.pw;
+  var name = req.body.name;
+  var email = req.body.email;
+  var data = [pw, name, email, id];
+
+  console.log("업데이트 시도");
+
+  var sql = "UPDATE user SET pw = ?, name = ?, email = ? where id = ?";
+
+  con.query(sql, data, function (err, result, fields) {
+    if (err) throw err;
+    console.log(result);
+    res.render('index', {
+      name: req.body.name,
+      id: req.params.id,
+      is_logined: req.params.is_logined,
+    });
+  });
+});
+
+
+app.listen(port, () => {
+  console.log(`${port}번 포트에서 서버 대기중입니다.`)
+});

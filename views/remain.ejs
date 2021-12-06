@@ -76,17 +76,25 @@
       background-color: #f2e8ff;
       text-align: center;
     }
-    table{
-     margin-left: 40%;
-     font-size: 20px;
-     border-spacing: 20px;
+
+    table {
+      margin-left: 40%;
+      font-size: 20px;
+      border-spacing: 20px;
+    }
+    .out{
+     margin-left: 16%;
+     font-weight: bold;
+     padding: 5px;
+     border: 1px solid;
+     border-radius: 10px;
    }
   </style>
   <title>거래내역 조회</title>
 </head>
 
 <body>
-  <h1>GSM 은행</h1>
+  <h1><a href="/index/<%= id %>"> GSM 은행 </a></h1>
   <% if(is_logined==false){ %>
     <nav id="topbar">
       <ul>
@@ -112,29 +120,8 @@
         <% if(plus==1){ %>
           <div id="account">
             <h2>계좌내역 조회</h2>
-          <table>
-            <tr>
-              <th>거래처</th>
-              <th>출금액</th>
-              <th>입금액</th>
-            </tr>
-            <% transaction.forEach(function (value) { %>
-              <tr>
-                <td>
-                  <%= value.sendName %>
-                </td>
-                <td>
-                  <%= value.MONEY %>
-                </td>
-                <td> </td>
-              </tr>
-              <% }); %>
-          </table>
-        </div>
-          <% }else{ %>
-            <div id="account">
-              <h2>계좌내역 조회</h2>
-            <table id="transaction">
+            <a href="/withdraw/<%= aNUMBER %>/<%= id %>" class="out">이체하기</a>
+            <table>
               <tr>
                 <th>거래처</th>
                 <th>출금액</th>
@@ -145,13 +132,36 @@
                   <td>
                     <%= value.sendName %>
                   </td>
-                  <td></td>
                   <td>
-                    <%= value.MONEY %>
+                    <%= value.money %>
                   </td>
+                  <td> </td>
                 </tr>
                 <% }); %>
             </table>
+          </div>
+          <% }else{ %>
+            <div id="account">
+              <h2>계좌내역 조회</h2>
+              <a href="/withdraw/<%= aNUMBER %>/<%= id %>" class="out">이체하기</a>
+              <table id="transaction">
+                <tr>
+                  <th>거래처</th>
+                  <th>출금액</th>
+                  <th>입금액</th>
+                </tr>
+                <% transaction.forEach(function (value) { %>
+                  <tr>
+                    <td>
+                      <%= value.sendName %>
+                    </td>
+                    <td></td>
+                    <td>
+                      <%= value.money %>
+                    </td>
+                  </tr>
+                  <% }); %>
+              </table>
             </div>
             <% } %>
               <footer>

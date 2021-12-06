@@ -18,9 +18,24 @@
     #topbar {
       height: 30px;
       width: 850px;
-      margin-left: 70%;
+      margin-left: 60%;
       margin-top: -4.5%;
       padding-bottom: 0.5%;
+    }
+
+    #topbar1 {
+      height: 30px;
+      width: 850px;
+      margin-left: 80%;
+      margin-top: -4.5%;
+      padding-bottom: 0.5%;
+    }
+    #topbar1 ul li {
+      list-style: none;
+      color: black;
+      float: left;
+      line-height: 30px;
+      margin: 10px;
     }
 
     ul {
@@ -71,27 +86,29 @@
   <title>Document</title>
 </head>
 <body>
-  <h1>GSM 은행</h1>
   <% if(is_logined==false){ %>
-  <nav id="topbar">
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/register">회원가입</a></li>
-      <li><a href="/login">로그인</a></li>
-    </ul>
-  </nav>
-  <% }else{ %>
-  <nav id="topbar">
-    <ul>
-      <li><a href="/index/<%= id %>">Home</a></li>
-      <li><a href="/list/<%= id %>">거래내역</a></li>
-      <li>
-        <%= name %> 님 환영합니다!
-      </li>
-      <li><a href="/logout">로그아웃</a></li>
-    </ul>
-  </nav>
-  <% } %>
+    <h1><a href="/index"> GSM 은행 </a></h1>
+    <nav id="topbar1">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/register">회원가입</a></li>
+        <li><a href="/login">로그인</a></li>
+      </ul>
+    </nav>
+    <% }else{ %>
+      <h1><a href="/index/<%= id %>"> GSM 은행 </a></h1>
+      <nav id="topbar">
+        <ul>
+          <li><a href="/index/<%= id %>">Home</a></li>
+          <li><a href="/list/<%= id %>">거래내역</a></li>
+          <li>
+            <%= name %> 님 환영합니다!
+          </li>
+          <li><a href="/mypage/<%= id %>">마이페이지</a></li>
+          <li><a href="/logout">로그아웃</a></li>
+        </ul>
+      </nav>
+      <% } %>
   <div class="main">
     <h4>
       안녕하십니까, 저희 GSM 은행은 본인의 통장잔고 조회 서비스를 제공해드리고 있으며 추후 보다 많은 서비스로 찾아뵐 수 있도록 노력하겠습니다.
