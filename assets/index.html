@@ -1,19 +1,111 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+    body{
+      width: 100%;
+      overflow-x: hidden ;
+      font-family: 'Nanum Gothic';
+    }
+    h1 {
+      margin-left: 2%;
+    }
+
+    #topbar {
+      height: 30px;
+      width: 850px;
+      margin-left: 85%;
+      margin-top: -4.7%;
+      padding-bottom: 0.5%;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    #topbar ul li {
+      list-style: none;
+      color: black;
+      float: left;
+      line-height: 30px;
+      margin: 10px;
+    }
+
+    a:link {
+      color: black;
+      text-decoration: none;
+    }
+
+    a:visited {
+      color: black
+    }
+
+    h4 {
+      margin-top: 5%;
+      margin-left: 2%;
+    }
+    .main{
+      margin-top: 2%;
+      padding-top: 1%;
+      padding-bottom: 5%;
+      background-color: #f2e8ff;
+    }
+    .lorem{
+      width: 1000px;
+    }
+    footer{
+     margin-top: -1.1%;
+     text-align: center;
+     background-color: #eeedf0;
+     height: 110px;
+   }
+   #foot{
+     padding-top: 3%;
+   }
+  </style>
   <title>GSM 은행</title>
 </head>
+
 <body>
-  <h1>GSM 은행</h1>
-  <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/register">회원가입</a></li>
-        <li><a href="/login">로그인</a></li>
-      </ul>
+  <h1><a href="/"> GSM 은행 </a></h1>
+  <nav id="topbar">
+    <ul>
+      <li><a class="menu" href="/register">회원가입</a></li>
+      <li><a class="menu" href="/login">로그인</a></li>
+    </ul>
   </nav>
+  <div class="main">
+    <h4>
+      안녕하십니까, 저희 GSM 은행은 본인의 통장잔고 조회 서비스를 제공해드리고 있으며 추후 보다 많은 서비스로 찾아뵐 수 있도록 노력하겠습니다.
+      <br>
+      이 사이트는 네트워크프로그래밍 수행평가를 위해 만들어진 사이트로, 간단한 화면 구성을 위해 이 글을 작성중에 있으니 이 부분 참고 부탁드리겠습니다.
+      <p class="lorem">Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam ducimus dolor adipisci reiciendis! Modi velit, repudiandae error 
+        quisquam fugit vero unde dolorum odit itaque nihil nulla sunt, quaerat commodi deleniti. Lorem ipsum dolor sit amet consectetur, 
+        adipisicing elit. Iste sapiente incidunt ipsa, quasi exercitationem libero nihil beatae saepe, numquam officiis obcaecati eveniet
+         odio quos, debitis eligendi? Distinctio sequi veritatis possimus! Lorem ipsum dolor, sit amet consectetur adipisicing elit. 
+         Cum nostrum tempore eum, aut, odio rem cupiditate doloribus corporis placeat vero veritatis pariatur possimus doloremque 
+         numquam odit magnam dignissimos unde minus! Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt dolorum voluptatem vitae? 
+         Voluptates maxime placeat illum non eaque, dignissimos magnam voluptate saepe, eos nobis delectus! Nisi voluptatibus sit vel quibusdam!
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis quia quasi voluptas, obcaecati et sapiente consectetur ipsum! Aliquid doloribus,
+         amet odio totam eum similique fugiat corporis enim rem iste dolor! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam praesentium
+          iusto nisi mollitia delectus vero, in culpa, soluta voluptate nostrum neque numquam ducimus consectetur accusamus nesciunt velit. Nihil,
+           nisi dignissimos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Id provident in blanditiis eum. Aliquam amet eos, itaque eius
+            vel molestiae a cum necessitatibus repellat ut! Sed in quo est eos? Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste 
+            possimus soluta doloribus eaque id! Maiores numquam commodi recusandae aliquam dolorum provident fuga! Expedita, cum! Distinctio 
+            doloremque inventore quo. Dolorem, itaque. Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores quae repellat facere numquam 
+            accusantium dignissimos illum inventore unde in! Quasi, odit vitae placeat corporis consectetur tempore impedit animi! Quas, hic!</p>
+    </h4>
+  </div>
+
+  <footer>
+    <p id="foot">COPYRIGHTS SHIN EUN JAE. ALL RIGHTS RESERVED.</p>
+  </footer>
 </body>
+
 </html>

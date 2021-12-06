@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -52,6 +53,28 @@
    h2{
      margin-top: 5%;
    }
+   
+   label {
+      margin-right: 2%;
+    }
+
+    .aNUMBER {
+      margin-top: 2%;
+      margin-bottom: 2%;
+      font-size: 20px;
+    }
+
+    .apw {
+      margin-bottom: 2%;
+      font-size: 20px;
+      margin-left: -3%;
+    }
+
+    .bank {
+      margin-bottom: 2%;
+      font-size: 20px;
+      margin-left: 2.2%;
+    }
    footer{
      margin-top: -1.1%;
      text-align: center;
@@ -70,11 +93,7 @@
     background-color: #f2e8ff;
     text-align: center;
    }
-   table{
-     margin-left: 35%;
-     font-size: 20px;
-     border-spacing: 20px;
-   }
+   
    .plus{
      margin-left: 16%;
      font-weight: bold;
@@ -82,53 +101,53 @@
      border: 1px solid;
      border-radius: 10px;
    }
- </style>
-  <title>거래내역</title>
+  </style>
+  <title>회원가입 | 로그인</title>
 </head>
+
 <body>
   <h1>GSM 은행</h1>
   <% if(is_logined==false){ %>
-  <nav id="topbar">
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/register">회원가입</a></li>
-      <li><a href="/login">로그인</a></li>
-    </ul>
-  </nav>
-  <% }else{ %>
-  <nav id="topbar">
-    <ul>
-      <li><a href="/index/<%= id %>">Home</a></li>
-      <li><a href="/list/<%= id %>">거래내역</a></li>
-      <li>
-        <%= name %> 님 환영합니다!
-      </li>
-      <li><a href="/logout">로그아웃</a></li>
-    </ul>
-  </nav>
-  <% } %>
-<div id="account">
-  <h2>거래내역 조회</h2>
-  <a href="/account/<%= id %>" class="plus">거래계좌 추가</a>
-    <table>
-      <tr>
-        <th>계좌번호</th>
-        <th>기관</th>
-        <th>예금잔액</th>
-        <th>계좌삭제</th>
-      </tr>
-      <% account.forEach(function (value) { %>
-        <tr>
-          <td><%= value.aNUMBER %></td>
-          <td><%= value.bank %></td>
-          <td><a href="/remain/<%= value.aNUMBER %>/<%= value.ID %>">조회</a></td>
-          <td><a href="/delete/<%= value.aNUMBER %>/<%= value.ID %>">삭제</a></td>
-        </tr>
-        <% }); %>
-    </table>
-  </div>
+    <nav id="topbar">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/register">회원가입</a></li>
+        <li><a href="/login">로그인</a></li>
+      </ul>
+    </nav>
+    <% }else{ %>
+      <nav id="topbar">
+        <ul>
+          <li><a href="/index/<%= id %>">Home</a></li>
+          <li><a href="/list/<%= id %>">거래내역</a></li>
+          <li>
+            <%= name %> 님 환영합니다!
+          </li>
+          <li><a href="/mypage/<%= id %>">마이페이지</a></li>
+          <li><a href="/logout">로그아웃</a></li>
+        </ul>
+      </nav>
+      <% } %>
+  <form method="post" id="account">
+    <h2>계좌번호 추가</h2>
+    <div class="aNUMBER">
+      <label>계좌번호</label>
+      <input type="text" name='aNUMBER' required><br>
+    </div>
+    <div class="apw">
+      <label>계좌 비밀번호</label>
+      <input type="password" name="apw" required><br>
+    </div>
+    <div class="bank">
+      <label>은행</label>
+      <input type="text" name="bank" required><br>
+    </div>
+
+    <input type="submit" value="추가" class="submit">
+  </form>
   <footer>
     <p id="foot">COPYRIGHTS SHIN EUN JAE. ALL RIGHTS RESERVED.</p>
   </footer>
 </body>
+
 </html>

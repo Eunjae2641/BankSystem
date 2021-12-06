@@ -1,34 +1,138 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+
+    body {
+      width: 100%;
+      overflow-x: hidden;
+      font-family: 'Nanum Gothic';
+    }
+
+    #topbar {
+      height: 30px;
+      width: 850px;
+      padding-left: 80%;
+      margin-top: -7.7%;
+      margin-bottom: 1%;
+    }
+
+    #topbar ul li {
+      list-style: none;
+      color: black;
+      float: left;
+      line-height: 30px;
+      margin: 10px;
+    }
+
+    a:link {
+      color: black;
+      text-decoration: none;
+    }
+
+    a:visited {
+      color: black
+    }
+
+    h1 {
+      margin-bottom: 5%;
+      margin-left: 2%;
+    }
+
+    #register {
+      text-align: center;
+      background-color: #f2e8ff;
+      padding-top: 4%;
+
+    }
+
+    h2 {
+      padding-bottom: 1%;
+    }
+
+    label {
+      margin-right: 2%;
+    }
+
+    .id {
+      margin-bottom: 2%;
+      font-size: 20px;
+    }
+
+
+    .pw {
+      margin-bottom: 2%;
+      font-size: 20px;
+      margin-left: -1.2%;
+    }
+
+    .name {
+      margin-bottom: 2%;
+      font-size: 20px;
+      margin-left: 1.2%;
+    }
+
+    .email {
+      font-size: 20px;
+    }
+
+    .submit {
+      margin-top: 5%;
+    }
+
+    footer {
+      margin-top: -1.1%;
+      text-align: center;
+      background-color: #eeedf0;
+      height: 110px;
+    }
+
+    p {
+      padding-top: 3%;
+    }
+  </style>
   <title>회원가입 | 로그인</title>
 </head>
+
 <body>
-  <table width = "30%">
-    <tr>
-      <td><a href="/">HOME</a></td>
-      <td><a href="/login">로그인</a></td>
-      <td><a href="/register">회원가입</a></td>
-    </tr>
-  </table>
-
-  <div>
-    <h1>회원정보입력</h1>
-
-    <form method="post">
+  <h1><a href="/"> GSM 은행 </a></h1>
+  <nav id="topbar">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/register">회원가입</a></li>
+      <li><a href="/login">로그인</a></li>
+    </ul>
+  </nav>
+  <br>
+  <form method="post" id="register">
+    <h2>회원가입</h2>
+    <div class="id">
       <label>아이디</label>
       <input type="text" name='id' required><br>
+    </div>
+    <div class="pw">
       <label>비밀번호</label>
       <input type="password" name="pw" required><br>
+    </div>
+    <div class="name">
       <label>이름</label>
       <input type="text" name="name" required><br>
-      <label>나이</label>
-      <input type="number" name="age" required><br><br>
+    </div>
+    <div>
+      <label class="email">이메일</label>
+      <input type="text" name="email" required><br><br>
+    </div>
 
-      <input type="submit" value="회원가입">
-    </form>
+    <input type="submit" value="회원가입" class="submit">
+  </form>
+  <footer>
+    <p>COPYRIGHTS SHIN EUN JAE. ALL RIGHTS RESERVED.</p>
+  </footer>
 </body>
+
 </html>
