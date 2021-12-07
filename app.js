@@ -312,7 +312,7 @@ app.post('/update/:id', (req, res) => {
 
   con.query(sql, data, function (err, result, fields) {
     if (err) throw err;
-    console.log(result);
+    console.log("업데이트 성공");
     res.render('index', {
       name: req.body.name,
       id: req.params.id,
