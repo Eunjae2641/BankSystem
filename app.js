@@ -123,14 +123,22 @@ app.get('/logout', (req, res) => {
 //list 페이지
 app.get('/list/:id', (req, res) => {
   console.log('거래내역 페이지');
-  con.query('select * from user where id=?', [req.params.id], (err, result) => {
-    const name1 = result[0].NAME
-    con.query('select * from account where id=?', [req.params.id], (err, data) => {
+    con.query('select aNUMBER, aPW, bank, NAME from account,user where account.id=user.id and account.id = ?', [req.params.id], (err, data) => {
       if (err) throw err;
+      var name = null;
+      if(data.length == 0){
+        con.query('select name from user where id = ?',[req.params.id],(err,result) =>{
+          name =  result[0].NAME;
+          console.log(name);
+      });
+    }else{
+      name = data[0].NAME;
+      console.log(name);
+    }
       req.session.save(function () {
         res.render('list', {
           account: data,
-          name: name1,
+          name: name,
           id: req.params.id,
           aNUMBER: data.aNUMBER,
           bank: data.bank,
@@ -139,7 +147,6 @@ app.get('/list/:id', (req, res) => {
       });
     });
   });
-});
 //연결계좌 추가
 app.get('/account/:id', (req, res) => {
   console.log('계좌 추가 페이지');
@@ -169,7 +176,7 @@ app.post('/account/:id', (req, res) => {
     con.query('select * from account where aNUMBER=?', [aNUMBER], (err, data) => {
       if (data.length == 0) {
         console.log('계좌 추가 성공');
-        con.query('insert into account(id,aNUMBER, apw,NAME,bank) values(?,?,?,?,?)', [req.params.id, aNUMBER, apw, name, bank]);
+        con.query('insert into account(id,aNUMBER, apw,bank) values(?,?,?,?)', [req.params.id, aNUMBER, apw, bank]);
         con.query('insert into transaction(aNUMBER, sendName, MONEY, PLUS, sendNumber,NAME,sendbank) values(?,?,?,?,?,?,?)', [aNUMBER, "GSMbank", 10000, 0, "99999999999",  name, "GSMbank"]);
         res.send(`<script>alert('계좌추가 성공!!'); location.href = document.referrer; </script>`); //아쉬운 점 script에 경우 location.href일 때 파라미터 값을 어떻게 전달해야하나 몰라 이 전의 페이지로 돌아가 거래내역을 눌러야함
       } else {
@@ -183,14 +190,18 @@ app.post('/account/:id', (req, res) => {
 app.get('/delete/:aNUMBER/:id', (req, res) => {
   console.log('거래내역 삭제 시도');
 
-  con.query('delete from account where aNUMBER=?', [req.params.aNUMBER], (err, data) => {
+  con.query('delete from account where aNUMBER=?', [req.params.aNUMBER], (err, deletedata) => {
     if (err) throw err;
-    console.log(data);
+    console.log(deletedata);
     console.log('거래내역 삭제 성공');
-    con.query('select * from user where id = ?', [req.params.id], (err, result) => {
-      const name = result[0].name;
-      con.query('select * from account where id=?', [req.params.id], (err, data) => {
+      con.query('select aNUMBER,aPW, bank, NAME from account,user where account.id = user.id and account.id=?', [req.params.id], (err, data) => {
         if (err) throw err;
+        if(data.length == 0){
+          con.query('select name from user where id = ?',[req.params.id],(err,result) =>{
+            const name =  result[0].NAME;
+        });
+      }else{
+        const name = data[0].name
         req.session.save(function () {
           res.render('list', {
             account: data,
@@ -201,10 +212,10 @@ app.get('/delete/:aNUMBER/:id', (req, res) => {
             is_logined: req.params.is_logined,
           });
         });
+      }
       });
     });
   });
-});
 
 app.get('/remain/:aNumber/:id', (req, res) => {
   console.log('거래내역 조회');
@@ -254,7 +265,7 @@ app.post('/withdraw/:aNumber/:id', (req, res) => {
   const apw = body.apw;
 
 
-  con.query('select * from account where id=?', [req.params.id], (err, result) => {
+  con.query('select * from user, account where user.ID = account.ID and user.ID=?', [req.params.id], (err, result) => {
     console.log(result);
     const name = result[0].NAME;
     if (apw == result[0].aPW) {
