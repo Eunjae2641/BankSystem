@@ -117,7 +117,6 @@
       </nav>
       <% } %>
 
-        <% if(plus==1){ %>
           <div id="account">
             <h2>계좌내역 조회</h2>
             <a href="/withdraw/<%= aNUMBER %>/<%= id %>" class="out">이체하기</a>
@@ -128,42 +127,30 @@
                 <th>입금액</th>
               </tr>
               <% transaction.forEach(function (value) { %>
-                <tr>
+                <% if(value.PLUS==1){ %>
+                  <tr>
                   <td>
                     <%= value.sendName %>
                   </td>
                   <td>
-                    <%= value.money %>
+                    <%= value.MONEY %>
                   </td>
                   <td> </td>
                 </tr>
-                <% }); %>
-            </table>
-          </div>
-          <% }else{ %>
-            <div id="account">
-              <h2>계좌내역 조회</h2>
-              <a href="/withdraw/<%= aNUMBER %>/<%= id %>" class="out">이체하기</a>
-              <table id="transaction">
-                <tr>
-                  <th>거래처</th>
-                  <th>출금액</th>
-                  <th>입금액</th>
-                </tr>
-                <% transaction.forEach(function (value) { %>
+                <% }else{ %>
                   <tr>
                     <td>
                       <%= value.sendName %>
                     </td>
                     <td></td>
                     <td>
-                      <%= value.money %>
+                      <%= value.MONEY %>
                     </td>
                   </tr>
+                  <% } %>
                   <% }); %>
-              </table>
-            </div>
-            <% } %>
+            </table>
+          </div>
               <footer>
                 <p id="foot">COPYRIGHTS SHIN EUN JAE. ALL RIGHTS RESERVED.</p>
               </footer>
